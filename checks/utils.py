@@ -25,22 +25,25 @@ def get_repo_id(repo_url):
 
 
 def parse_commit_datetime(datetime_str) -> datetime:
-	format = "%Y-%m-%dT%H:%M:%SZ"
-	alternate_format = "%a, %d %b %Y %H:%M:%S %Z"
-	return UTC.localize(datetime.strptime(datetime_str, format))
+	# format = "%Y-%m-%dT%H:%M:%SZ"
+	return UTC.localize(datetime.fromisoformat(datetime_str))
 
 
-def get_repo_info(repo_url) -> Optional[RepoInfo]:
+def get_repo_info(repo_url, first_and_last_only=True) -> Optional[RepoInfo]:
 	repo_id = get_repo_id(repo_url)
 	try:
 		repo = get_github().get_repo(repo_id)
-		commits = list(repo.get_commits())
-
+		commits = list(repo.get_commits())  # reversed chrono order
+		num_commits = len(commits)
+		if first_and_last_only:
+			commits = [commits[0], commits[-1]] if len(commits) > 1 else [commits[0]]
+   
+		print(f"Checking {len(commits)} commits from {repo_url}")
 		for commit in commits:
 			datetime_str = commit.raw_data['commit']['author']['date']
-			commit.last_modified_datetime = parse_commit_datetime(datetime_str)
+			commit.last_modified_datetime = UTC.localize(datetime.fromisoformat(datetime_str[:-1]))
 
-		return RepoInfo(repo, commits)
+		return RepoInfo(repo, commits, num_commits)
 
 	except Exception as e:
 		print(e)

@@ -8,7 +8,7 @@ class OnlyValidAuthorsChecker(BaseChecker):
 
     @staticmethod
     def perform_check(submission: Submission, config: HackathonConfig, repo_info: RepoInfo) -> Tuple[bool, Optional[str]]:
-        contributors = {commit.author.login for commit in repo_info.commits}
+        contributors = {commit.author.login if commit.author else "NoAuthor" for commit in repo_info.commits}
         expected_contributors = set(submission.authors)
 
         if contributors == expected_contributors:

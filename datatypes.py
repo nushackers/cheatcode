@@ -17,6 +17,7 @@ class Submission:
 class RepoInfo:
 	repo: Repository.Repository
 	commits: List[Commit.Commit]
+	num_commits: int
 
 
 @dataclass

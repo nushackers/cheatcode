@@ -1,5 +1,6 @@
 import yaml
 import csv
+from tqdm import tqdm
 from datatypes import Submission, HackathonConfig
 from utils import get_all_registered_checks
 from typing import Dict, Union, Optional
@@ -23,13 +24,14 @@ def check(config_file: str, submissions_file: Optional[str]=None):
 
 	check_outcomes = []
 
-	for row in submission_rows:
+	for row in tqdm(submission_rows):
 		submission = Submission(row["devpost_url"], row['repo_url'], row['authors'].split(','))
 
 		try:
 			check_outcomes.append(check_submission(submission, hackathon_config))
-		except:
-			break
+		except Exception as e:
+			print(e)
+			continue
 
 	with open('results.tsv', 'w+') as output_file:
 		dict_writer = csv.DictWriter(output_file, check_outcomes[0].keys())

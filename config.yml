@@ -5,7 +5,7 @@ hackathon_config:
   checks:
     - substantial_authors_contributions
     - commit_only_during_hackathon
-    - only_valid_authors
+#    - only_valid_authors
     - repo_not_forked
 #    - no_commit_overlap_with_other_user_project
 #    - source_code_not_similar_to_other_user_project

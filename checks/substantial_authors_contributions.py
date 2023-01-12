@@ -8,9 +8,7 @@ class SubstantialAuthorsContributionsChecker(BaseChecker):
 
     @staticmethod
     def perform_check(submission: Submission, config: HackathonConfig, repo_info: RepoInfo) -> Tuple[bool, Optional[str]]:
-        num_commits = len(repo_info.commits)
-
-        if num_commits > 5:
+        if repo_info.num_commits > 2:
             return True, None
 
-        return False, f"This project only has {num_commits} commits"
+        return False, f"This project only has {repo_info.num_commits} commits"
