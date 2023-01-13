@@ -11,6 +11,7 @@ class Submission:
 	devpost_url: str
 	repo_url: str
 	authors: List[str]
+	team_id: int
 
 
 @dataclass
